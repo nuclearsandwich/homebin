@@ -1,0 +1,18 @@
+#!/bin/bash
+## Time Clock ##
+# A Simple script to log in and out times. #
+CLOCKFILE=$HOME/.tc/$2.tc
+
+case $1 in
+	clockin)
+	echo "In at $(date) Message: $3" >> $CLOCKFILE
+	;;
+	clockout)
+	echo "Out at $(date) Message: $3" >> $CLOCKFILE
+	echo "=================" >> $CLOCKFILE
+	;;
+	*)
+	echo "unk at $(date) Message: $3" >> $CLOCKFILE
+	;;
+esac
+

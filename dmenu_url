@@ -1,0 +1,23 @@
+#!/bin/bash -x
+which dmenu || exit 2
+which $BROWSER || exit 3
+BROWSER=uzbl
+BOOKMARKS="$HOME/.bookmarks"
+[ -z "$WWW_HOME" ] && WWW_HOME="http://www.google.com/"
+
+bookmarks() {
+  echo $WWW_HOME
+  pri=`xclip -o -selection primary`   && [ -n "$pri" ] && echo $pri
+  sec=`xclip -o -selection secondary` && [ -n "$sec" ] && echo $sec
+  sel=`xclip -o -selection clipboard` && [ -n "$sel" ] && echo $sel
+  [ -n $BOOKMARKS -a -r $BOOKMARKS ] && cat $BOOKMARKS
+}
+
+uri=`bookmarks | dmenu $DMENU_OPTS -p 'uri'` || exit 4
+expr "$uri" : '^https\?://' || uri="http://${uri}"
+
+if [ -p "$4" -a -w "$4" ]; then
+  echo "uri $uri" > "$4"
+else
+  exec $BROWSER $uri
+fi

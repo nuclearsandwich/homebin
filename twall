@@ -1,0 +1,86 @@
+#!/usr/bin/env ruby
+require 'thor'
+require 'json'
+
+class TWall < Thor
+	BUCKETS = {
+		"td" => "Today",
+		"tm" => "Tomorrow",
+		"tw" => "This Week",
+		"nw" => "Next Week",
+		"fu" => "Future"
+	}
+	desc 'buckets', 'display buckets and their shorthand'
+	def buckets
+		BUCKETS.each do |k,v|
+			puts "#{v} is abbreviated #{k}"
+		end
+	end
+
+	desc 'show [BUCKET]', 'list all tasks, or all tasks in the given bucket'
+	def show bucket = nil
+		if bucket
+			print_bucket bucket
+		else
+			BUCKETS.keys.each do |b|
+				print_bucket b
+			end
+		end
+	end
+
+	desc 'add BUCKET TASK', 'add task to bucket'
+	def add bucket, task
+		wall[bucket] << task
+		writeable_wall << wall.to_json 
+		print_bucket bucket
+	end
+
+	desc 'remove BUCKET TASK', 'remove task from bucket'
+	def remove bucket, task
+		wall[bucket].delete task
+		writeable_wall << wall.to_json 
+		print_bucket bucket
+	end
+
+	desc 'purge BUCKET', 'delete all contents of the bucket'
+	def purge bucket
+		wall[bucket] = []
+		writeable_wall << wall.to_json 
+		puts "#{BUCKETS[bucket]} purged."
+	end
+
+	desc 'shift SOURCE_BUCKET DEST_BUCKET', 'merge contents of two buckets'
+	def shift source, dest
+		wall[dest] += wall[source]
+		purge source
+	end
+
+	desc 'move SOURCE_BUCKET DEST_BUCKET TASK', 'move task from one bucket to another'
+	def move source, dest, task
+		remove source, task
+		add source, task
+	end
+
+	private
+	def wall
+		@wall ||= JSON.parse(File.read(wallfile))
+	end
+
+	def print_bucket b
+		puts "#{BUCKETS[b]}:"
+		wall[b].each do |t|
+			puts "	#{t}"
+		end
+		puts nil
+	end
+
+	def writeable_wall
+		@file ||= File.open(wallfile, 'w')
+	end
+
+	def wallfile
+		"#{ENV['HOME']}/.wallfile"
+	end
+end
+
+TWall.start

@@ -1,0 +1,5 @@
+#!/bin/sh
+which dmenu || exit 2
+test -d "$1" || exit 3
+file=`ls $1 | dmenu -p 'file' $DMENU_OPTS`
+echo $1/$file

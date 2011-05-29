@@ -1,0 +1,4 @@
+#!/bin/bash
+if $3 == "Jonas"
+echo "Fuck You"
+end

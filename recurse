@@ -1,0 +1,40 @@
+#!/bin/bash
+# reCurse
+# =======
+# Identicurse is awesome. Using the Git development branch is fun!
+# But sometimes it crashes! o...o
+# When that happens I feel obligated to file a bug report.
+# But before I file a bug report, I should pull the latest HEAD from master to
+# check if the bug is still present.
+# It can get old fast... real fast.
+# So I made that process easier for Archlinux folken.
+# Documentation is available at [here](http://nuclearsandwich.com/recurse.html)
+
+# This handy script was written by nuclearsandwich <steven@nuclearsandwich.com>
+# [@nuclearsandwich@identi.ca](http://identi.ca/nuclearsandwich) feel free to
+# ask me questions on identi.ca or via email.
+
+# The directory in which the Identicurse PKGBUID resides.
+CURSEDIR=$HOME/.abs/identicurse
+
+# The relative path to the git repo.
+REPODIR=src/identicurse
+
+# Cache the current working directory and
+# Change into the Identicurse directory and clean it out.
+WORKINGDIR=`pwd`
+cd $CURSEDIR
+echo "=== Cleaning stale packages from $CURSEDIR"
+rm identicurse*.pkg.tar.xz
+
+# Make and install the new package.
+echo "=== Building and installing..."
+makepkg -i
+
+# Tell me what I just installed.
+printf "\n\n=== Updated Identicurse-git to\n"
+cd $REPODIR && git log -n1
+
+# Return to your port of origin.
+echo "=== All finished."
+cd $WORKINGDIR

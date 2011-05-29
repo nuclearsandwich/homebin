@@ -1,0 +1,31 @@
+#!/bin/bash
+which dmenu || exit 2
+CACHE=$HOME/.dmenu_cache.$HOST
+IFS=':'
+
+uptodate() {
+  test -f "$CACHE" &&
+  for dir in $PATH
+  do
+    test ! $dir -nt "$CACHE" || return 1
+  done
+}
+
+if ! uptodate
+then
+  for path in $PATH
+  do
+    test -d "$path" &&
+    cd "$path" &&
+    for file in *
+    do
+      test -x "$file" &&
+      echo "$file"
+    done
+  done | sort | uniq > "$CACHE".$$ &&
+  mv "$CACHE".$$ "$CACHE"
+fi
+
+unset IFS
+exe=`dmenu $DMENU_OPTS -p 'run' < $CACHE` || exit 4
+exec $exe

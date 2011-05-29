@@ -1,0 +1,19 @@
+#!/bin/bash
+## A simple script to start dwm and some other nice things. ##
+#xcompmgr -c -t-5 -l-5 -r4.2 -o.55 -D6 -d :0.0 &
+#xcompmgr -c -t-7 -l-9 -o.89 -D4 -f -d :0.0 &
+#xautolock -time 5 -locker lockx -nowlocker lockx -detectsleep -corners 000+ -cornerdelay 3 &
+#urxvtd &
+#xcompmgr -c -t-3 -l-3 -r4 -o.7 -D5 -f -d :0.0 & ## Best xcompmgr!
+dropbox start &
+conky -c ~/.conkyrc | while true; read line; do xsetroot -name "$line"; sleep 1s; done &
+mpd $HOME/.mpd/config &
+nitrogen --restore &
+redshift -l 37.36:-122.02 -t 6500:4500 &
+urxvt -title htop -e htop &
+urxvt &
+urxvt &
+urxvt &
+pidgin &
+#thunderbird &
+exec dwm

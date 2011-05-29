@@ -1,0 +1,6 @@
+#!/bin/sh
+which dmenu || exit 2
+which cut || exit 3
+which xterm || exit 3
+host=`cut -d, -f1 ~/.ssh/known_hosts | dmenu $DMENU_OPTS -p 'ssh'` || exit 4
+exec xterm -e ssh $host

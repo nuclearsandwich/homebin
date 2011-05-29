@@ -1,0 +1,5 @@
+#!/bin/sh
+which dmenu || exit 2
+which sed || exit 3
+page=`ls /usr/share/man/man?/* /usr/man/man?/* | sed 's/.*\/\([^./]\+\)[^/]\+/\1/' | dmenu -p 'man' $DMENU_OPTS` || exit 4
+exec xterm -e man $page
