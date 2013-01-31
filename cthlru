@@ -1,0 +1,47 @@
+#!/bin/bash
+
+usage() {
+	cat - <<EOM
+$(basename $0): A terrible tool for LRU caching.
+	$(basename $0) <cache name>
+	$(basename $0) <cache name> <hit value>
+EOM
+}
+
+cache-read() {
+	cd "$cachedir/$cachename"
+	ls -tu | xargs cat
+}
+
+cache-hit() {
+	local sha=`echo "$value" | sha1sum | cut -d' ' -f1`
+	local file="$cachedir/$cachename/$sha"
+
+	if [ -f "$file" ]; then
+		touch -a "$file"
+	fi
+	echo "$value" > "$file"
+}
+
+cachedir=${CTHLRU_CACHE:-"$HOME/.cthlru"}
+
+if [ -z "$1" ]; then
+	usage
+	exit
+fi
+
+cachename="$1"
+
+if [ ! -d "$cachedir/$cachename" ]; then
+	mkdir -p "$cachedir/$cachename"
+fi
+
+
+if [ -n "$2" ]; then
+	value="$2"
+	cache-hit
+else
+	cache-read
+fi
+
+
