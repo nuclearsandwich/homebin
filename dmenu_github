@@ -1,0 +1,13 @@
+#!/bin/sh
+
+which dmenu | exit 2
+which cthlru | exit 2
+
+browser="${BROWSER:-open}"
+url="https://github.com/"
+cachename="dmenu_github"
+
+go=`cthlru "$cachename" | dmenu -p "GitHub: " || exit 1`
+cthlru "$cachename" "$go"
+exec "$browser" "${url}${go}"
+
