@@ -1,0 +1,5 @@
+#!/bin/sh
+
+for xresource in $(ls ${XDG_CONFIG_HOME:-"$HOME/.config"}/xresources.d/*.xresources); do
+	xrdb -merge $xresource
+done
