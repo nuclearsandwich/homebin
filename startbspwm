@@ -1,0 +1,16 @@
+#!/bin/sh
+
+BSPWM_SOCKET="$HOME/.cache/bspwm/bspwm-socket"
+export BSPWM_SOCKET
+
+if [ !-d $(dirname $BSPWM_SOCKET) ]; then
+	mkdir $BSPWM_SOCKET
+fi
+
+if ! pgrep sxhkd; then
+	sxhkd -c "$HOME/.config/sxhkd/sxhkdrc" "$HOME/.config/sxhkd/bspwm.sxhkdrc"
+fi
+
+echo $BSPWM_SOCKET
+
+bspwm

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+branchline="$(git branch | grep '\*')"
+if [ $? != 0 ]; then
+	echo 'no git'
+else
+	echo "$branchline" | cut -c3-
+fi
+

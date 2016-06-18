@@ -1,0 +1,6 @@
+#!/usr/bin/fish
+
+cd $HOME/.config/termite
+set -x COLOR gruvbox-dark.color
+make
+xbacklight -set 30

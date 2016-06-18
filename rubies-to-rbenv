@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+RUBIES_PATH="#{ENV['HOME']}/.rubies"
+RBENV_VERSIONS_PATH="#{ENV['HOME']}/.rbenv/versions"
+
+
+
+
